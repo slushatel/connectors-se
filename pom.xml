@@ -59,6 +59,7 @@
     <module>processing</module>
     <module>jdbc</module>
     <module>salesforce</module>
+    <module>marketo</module>
   </modules>
 
   <profiles>
