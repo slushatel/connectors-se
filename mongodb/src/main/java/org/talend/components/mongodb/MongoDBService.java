@@ -11,23 +11,25 @@ import org.talend.sdk.component.api.service.healthcheck.HealthCheckStatus;
 
 import java.util.logging.Logger;
 
+import static org.talend.sdk.component.api.service.healthcheck.HealthCheckStatus.Status.KO;
 import static org.talend.sdk.component.api.service.healthcheck.HealthCheckStatus.Status.OK;
 
 @Slf4j
 @Service
 public class MongoDBService {
 
-    MongoClient mongo;
+    private MongoClient mongo;
 
     public MongoClient getConnection(final MongoDBDataStore datasetore) {
         // disable the log4j of mongodb
         Logger.getLogger("org.mongodb.driver").setLevel(java.util.logging.Level.OFF);
 
-        MongoClientOptions clientOptions = datasetore.isUse_SSL()
-                ? new MongoClientOptions.Builder().socketFactory(javax.net.ssl.SSLSocketFactory.getDefault()).build()
-                : new MongoClientOptions.Builder().build();
+        MongoClientOptions clientOptions =
+                // datasetore.isUse_SSL()? new
+                // MongoClientOptions.Builder().socketFactory(javax.net.ssl.SSLSocketFactory.getDefault()).build():
+                new MongoClientOptions.Builder().build();
 
-        ServerAddress serverAddress = new ServerAddress(datasetore.getServer(), datasetore.getPort());
+        ServerAddress serverAddress = new ServerAddress(datasetore.getServer(), Integer.valueOf(datasetore.getPort()));
 
         if (datasetore.isAuthentication()) {
             MongoCredential mongoCredential = null;
@@ -68,8 +70,7 @@ public class MongoDBService {
     public MongoCollection<Document> getCollection(final MongoDBInputDataset dataset) {
         MongoDatabase db = mongo.getDatabase(dataset.getDataStore().getDatabase());
         log.debug("Retrieving records from the datasource.");
-        MongoCollection<Document> collection = db.getCollection(dataset.getCollection());
-        return collection;
+        return db.getCollection(dataset.getCollection());
     }
 
     public void close() {
@@ -81,13 +82,10 @@ public class MongoDBService {
     @HealthCheck("basic.healthcheck")
     public HealthCheckStatus testConnection(final MongoDBDataStore datasetore, final Messages i18n) {
         try {
-            if (mongo == null) {
-                mongo = this.getConnection(datasetore);
-            } else {
-                mongo.isLocked();
-            }
+            mongo = this.getConnection(datasetore);
+            mongo.isLocked();
         } catch (Exception e) {
-            return new HealthCheckStatus(HealthCheckStatus.Status.KO, i18n.healthCheckFailed(e.getLocalizedMessage()));
+            return new HealthCheckStatus(KO, i18n.healthCheckFailed(e.getMessage()));
         }
 
         return new HealthCheckStatus(OK, i18n.healthCheckOk());

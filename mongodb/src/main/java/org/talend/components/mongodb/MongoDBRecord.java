@@ -4,26 +4,20 @@ import org.apache.avro.Schema;
 import org.apache.avro.SchemaBuilder;
 import org.apache.avro.generic.IndexedRecord;
 import org.bson.Document;
-import org.talend.sdk.component.api.service.Service;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Set;
 
 public class MongoDBRecord implements IndexedRecord {
 
-    @Service
-    private Messages i18n;
+    private Document document;
 
-    Document document;
-
-    List<String> fields;
+    private List<String> fields;
 
     public MongoDBRecord(Document document, List<String> schema) {
         this.document = document;
-        this.fields = schema;
         if (schema == null || schema.size() == 0) {
-            this.fields = new ArrayList<String>();
+            this.fields = new ArrayList<>();
             fields.addAll(document.keySet());
         } else {
             this.fields = schema;

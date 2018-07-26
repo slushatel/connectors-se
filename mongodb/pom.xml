@@ -11,7 +11,7 @@
         <version>1.0.0-SNAPSHOT</version>
     </parent>
 
-    <artifactId>jdbc</artifactId>
+    <artifactId>mongodb</artifactId>
     <name>Components :: MongoDB</name>
 
     <properties>
@@ -37,7 +37,15 @@
             <artifactId>xbean-finder-shaded</artifactId>
             <version>${xbean-finder-shaded.version}</version>
         </dependency>
+        <!-- test -->
+        <dependency>
+            <groupId>org.talend.sdk.component</groupId>
+            <artifactId>component-runtime-junit</artifactId>
+            <version>${component-runtime.version}</version>
+            <scope>test</scope>
+        </dependency>
     </dependencies>
 
     <!-- test -->
+
 </project>

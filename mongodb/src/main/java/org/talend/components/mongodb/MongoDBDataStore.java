@@ -2,8 +2,10 @@ package org.talend.components.mongodb;
 
 import lombok.Data;
 import org.talend.sdk.component.api.configuration.Option;
+import org.talend.sdk.component.api.configuration.action.Checkable;
 import org.talend.sdk.component.api.configuration.condition.ActiveIf;
 import org.talend.sdk.component.api.configuration.condition.ActiveIfs;
+import org.talend.sdk.component.api.configuration.constraint.Pattern;
 import org.talend.sdk.component.api.configuration.type.DataStore;
 import org.talend.sdk.component.api.configuration.ui.DefaultValue;
 import org.talend.sdk.component.api.configuration.ui.layout.GridLayout;
@@ -11,7 +13,6 @@ import org.talend.sdk.component.api.configuration.ui.widget.Credential;
 import org.talend.sdk.component.api.meta.Documentation;
 
 import java.io.Serializable;
-import java.lang.annotation.Annotation;
 
 @Data
 @GridLayout({
@@ -24,6 +25,7 @@ import java.lang.annotation.Annotation;
         @GridLayout.Row({ "Set_Authentication_Database" }), @GridLayout.Row({ "Authentication_Databse" }),
         @GridLayout.Row({ "Username" }), @GridLayout.Row({ "Password" }) })
 @DataStore("Mongodb")
+@Checkable("basic.healthcheck")
 @Documentation("A connection to a Mongodb")
 public class MongoDBDataStore implements Serializable {
 
@@ -38,7 +40,8 @@ public class MongoDBDataStore implements Serializable {
     @Option
     @Documentation("Listening port of the database server.")
     @DefaultValue("27017")
-    private int Port;
+    @Pattern("\\d{0,5}")
+    private String Port;
 
     @Option
     @Documentation("Name of the database.")
@@ -102,7 +105,9 @@ public class MongoDBDataStore implements Serializable {
     private boolean Set_Authentication_Database;
 
     @Option
-    @ActiveIf(target = "Set_Authentication_Database", value = "true")
+    @ActiveIfs(value = { @ActiveIf(target = "Authentication", value = "true"),
+            @ActiveIf(target = "Set_Authentication_Database", value = "true"),
+            @ActiveIf(target = "Authentication_mechanism", value = { "NEGOTIATE_MEC", "SCRAMSHA1_MEC" }) })
     @Documentation("Set MongoDB Authentication database")
     private String Authentication_Databse;
 

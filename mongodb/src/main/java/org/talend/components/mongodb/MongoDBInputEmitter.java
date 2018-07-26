@@ -1,9 +1,8 @@
 package org.talend.components.mongodb;
 
 import com.mongodb.DBObject;
-import com.mongodb.client.FindIterable;
-import com.mongodb.client.ListIndexesIterable;
 import com.mongodb.MongoClient;
+import com.mongodb.client.FindIterable;
 import com.mongodb.client.MongoCollection;
 import com.mongodb.client.MongoCursor;
 import lombok.extern.slf4j.Slf4j;
@@ -15,11 +14,14 @@ import org.talend.sdk.component.api.configuration.Option;
 import org.talend.sdk.component.api.input.Emitter;
 import org.talend.sdk.component.api.input.Producer;
 import org.talend.sdk.component.api.meta.Documentation;
+import org.talend.sdk.component.api.service.Service;
 
 import javax.annotation.PostConstruct;
 import javax.annotation.PreDestroy;
 import java.io.Serializable;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 @Slf4j
 @Version
@@ -27,6 +29,9 @@ import java.util.List;
 @Emitter(name = "Input")
 @Documentation("MongoDB query input ")
 public class MongoDBInputEmitter implements Serializable {
+
+    @Service
+    private Messages i18n;
 
     private final MongoDBService service;
 
@@ -43,6 +48,7 @@ public class MongoDBInputEmitter implements Serializable {
     public MongoDBInputEmitter(@Option("configuration") final MongoDBInputDataset inputDataset, final MongoDBService service) {
         this.service = service;
         this.inputDataset = inputDataset;
+        this.fields = inputDataset.getSchema();
     }
 
     @PostConstruct
@@ -82,7 +88,7 @@ public class MongoDBInputEmitter implements Serializable {
 
         Document myQuery = Document.parse(inputDataset.getQuery());
         FindIterable<Document> fi = collection.find(myQuery).noCursorTimeout(false);
-        java.util.Map<String, String> pathMap = new java.util.HashMap<String, String>();
+        // Map<String, String> pathMap = new HashMap<String, String>();
         // fi = fi.limit(inputDataset.getLimite());
         MongoCursor<Document> cursor = fi.iterator();
         if (cursor.hasNext()) {
@@ -94,7 +100,7 @@ public class MongoDBInputEmitter implements Serializable {
     }
 
     private Object getValue(String parentNode, String currentName, Document dbObject) {
-
+        // Used for Mapp only, not implement yet
         // Get the node value in embedded document,
         // If have no embedded document get root document node.
         Object value = null;
