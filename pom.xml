@@ -45,6 +45,7 @@
         <junit-platform-surefire-provider.version>1.2.0</junit-platform-surefire-provider.version>
 
         <surefire.version>2.21.0</surefire.version>
+        <failsafe.version>2.22.0</failsafe.version>
         <jacoco.version>0.8.1</jacoco.version>
 
         <!-- set to true if you use native beam programming model -->
@@ -101,6 +102,12 @@
         <dependency>
             <groupId>org.junit.jupiter</groupId>
             <artifactId>junit-jupiter-api</artifactId>
+            <version>${junit5.version}</version>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.junit.jupiter</groupId>
+            <artifactId>junit-jupiter-params</artifactId>
             <version>${junit5.version}</version>
             <scope>test</scope>
         </dependency>
@@ -253,9 +260,9 @@
                 <plugin>
                     <groupId>org.apache.maven.plugins</groupId>
                     <artifactId>maven-failsafe-plugin</artifactId>
-                    <version>2.22.0</version>
+                    <version>${failsafe.version}</version>
                     <configuration>
-                        <argLine>${testArgLine}</argLine>
+                        <argLine>${failSafeArgLine}</argLine>
                         <systemPropertyVariables>
                             <dockerHostAddress>${docker.host.address}</dockerHostAddress>
                         </systemPropertyVariables>
@@ -290,7 +297,7 @@
                 <plugin>
                     <groupId>io.fabric8</groupId>
                     <artifactId>docker-maven-plugin</artifactId>
-                    <version>0.26.1</version>
+                    <version>${docker-maven-plugin.version}</version>
                 </plugin>
             </plugins>
         </pluginManagement>
@@ -519,7 +526,7 @@
                         </goals>
                         <configuration>
                             <destFile>${project.build.directory}/coverage-reports/jacoco-it.exec</destFile>
-                            <propertyName>testArgLine</propertyName>
+                            <propertyName>failSafeArgLine</propertyName>
                         </configuration>
                     </execution>
 
