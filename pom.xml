@@ -265,6 +265,8 @@
                         <argLine>${failSafeArgLine}</argLine>
                         <systemPropertyVariables>
                             <dockerHostAddress>${docker.host.address}</dockerHostAddress>
+                            <javax.net.ssl.trustStore>../src\test\resources\docker-integration-test\test_docker.jks</javax.net.ssl.trustStore>
+                            <javax.net.ssl.trustStorePassword>changeit</javax.net.ssl.trustStorePassword>
                         </systemPropertyVariables>
                     </configuration>
                     <executions>
