@@ -31,7 +31,7 @@
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 
-        <component-api.version>1.0.9</component-api.version>
+        <component-api.version>1.0.11</component-api.version>
         <component-runtime.version>1.0.5-SNAPSHOT</component-runtime.version>
         <slf4j.version>1.7.25</slf4j.version>
 
@@ -51,6 +51,7 @@
         <!-- set to true if you use native beam programming model -->
         <validation.model>true</validation.model>
         <docker-maven-plugin.version>0.26.1</docker-maven-plugin.version>
+        <talend-docker-registry>registry.datapwn.com</talend-docker-registry>
     </properties>
 
     <modules>
